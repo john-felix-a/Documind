@@ -27,6 +27,7 @@ export default function ChatInterface({ isReady, initialMessages, onUpdateMessag
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const suggestions = [
@@ -47,7 +48,12 @@ export default function ChatInterface({ isReady, initialMessages, onUpdateMessag
   }, [messages, mounted]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
   };
 
   useEffect(() => {
@@ -204,7 +210,10 @@ export default function ChatInterface({ isReady, initialMessages, onUpdateMessag
       </div>
 
       {/* MESSAGES AREA BELOW INPUT */}
-      <div className={`flex-1 overflow-y-auto px-6 py-8 space-y-8 scrollbar-hide ${!isReady ? 'opacity-20 pointer-events-none' : ''}`}>
+      <div 
+        ref={messagesContainerRef}
+        className={`flex-1 overflow-y-auto px-6 py-8 space-y-8 scrollbar-hide ${!isReady ? 'opacity-20 pointer-events-none' : ''}`}
+      >
         {messages.map((msg, index) => (
           <div key={index} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-slide-up`}>
             <div className={`flex gap-4 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>

@@ -35,9 +35,15 @@ def process_pdf(file_path: str):
 
     # Clear previous knowledge base to avoid irrelevant data
     if os.path.exists(CHROMA_PATH):
-        import shutil
-        shutil.rmtree(CHROMA_PATH)
-        print(f"Cleared existing knowledge base at {CHROMA_PATH}")
+        try:
+            vector_store = Chroma(
+                persist_directory=CHROMA_PATH,
+                embedding_function=embeddings
+            )
+            vector_store.delete_collection()
+            print(f"Cleared existing knowledge base at {CHROMA_PATH}")
+        except Exception as e:
+            print(f"Could not clear ChromaDB collection: {e}")
 
     # Split text into chunks
     text_splitter = RecursiveCharacterTextSplitter(
