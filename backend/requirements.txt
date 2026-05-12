@@ -1,0 +1,19 @@
+# Core API
+fastapi
+uvicorn
+python-multipart
+python-dotenv
+
+# LangChain & AI
+langchain
+langchain-community
+langchain-groq
+langchain-google-genai
+langchain-openai
+langchain-huggingface
+
+# Vector Database & Processing
+langchain-chroma
+pypdf
+sentence-transformers
+huggingface-hub
